@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package seed;
+option go_package="./seed";
+
+message SeedAddRequest {
+  string name = 1;
+}
+
+message SeedAddResponse {
+  int32 code = 1;
+  string msg = 2;
+}
+
+service SeedService {
+  rpc AddSeed(SeedAddRequest) returns(SeedAddResponse);
+}
