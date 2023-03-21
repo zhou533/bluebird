@@ -24,7 +24,7 @@ func NewAddSeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddSeedLo
 }
 
 func (l *AddSeedLogic) AddSeed(req *seed.SeedAddRequest) (*seed.SeedAddResponse, error) {
-	err := l.svcCtx.SeedModel.InsertScreenName(l.ctx, req.Name)
+	err := l.svcCtx.SeedModel.InsertScreenName(l.ctx, req.ScreenName)
 	if err != nil {
 		return nil, err
 	}
