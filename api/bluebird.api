@@ -7,18 +7,17 @@ info (
 	email: "yo.zhouq@gmail.com"
 )
 
-type request {
-	// TODO: add members here and delete this comment
+type SeedAddRequest {
+	ScreenName string `json:"screenName"`
 }
 
-type response {
-	// TODO: add members here and delete this comment
+type SeedAddResponse {
+	Code int32  `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 service bluebird-api {
-	@handler GetUser // TODO: set handler name and delete this comment
-	get /users/id/:userId(request) returns(response)
 	
-	@handler CreateUser // TODO: set handler name and delete this comment
-	post /users/create(request)
+	@handler AddSeedHandler
+	post /seed/add (SeedAddRequest) returns (SeedAddResponse)
 }
