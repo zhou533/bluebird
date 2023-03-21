@@ -24,6 +24,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
+	defer ctx.Cleanup()
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		seed.RegisterSeedServiceServer(grpcServer, server.NewSeedServiceServer(ctx))

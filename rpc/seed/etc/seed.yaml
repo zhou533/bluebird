@@ -4,3 +4,4 @@ Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: seed.rpc
+DataSource: host=172.31.20.51 port=5432 user=ioslash dbname=db_bluebird sslmode=disable
