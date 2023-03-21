@@ -4,7 +4,7 @@ package seed;
 option go_package="./seed";
 
 message SeedAddRequest {
-  string name = 1;
+  string screen_name = 1;
 }
 
 message SeedAddResponse {

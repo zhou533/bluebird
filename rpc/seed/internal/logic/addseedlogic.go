@@ -23,8 +23,14 @@ func NewAddSeedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddSeedLo
 	}
 }
 
-func (l *AddSeedLogic) AddSeed(in *seed.SeedAddRequest) (*seed.SeedAddResponse, error) {
-	// todo: add your logic here and delete this line
+func (l *AddSeedLogic) AddSeed(req *seed.SeedAddRequest) (*seed.SeedAddResponse, error) {
+	err := l.svcCtx.SeedModel.InsertScreenName(l.ctx, req.Name)
+	if err != nil {
+		return nil, err
+	}
 
-	return &seed.SeedAddResponse{}, nil
+	return &seed.SeedAddResponse{
+		Code: 0,
+		Msg:  "success",
+	}, nil
 }
