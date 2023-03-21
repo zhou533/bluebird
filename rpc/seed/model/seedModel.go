@@ -12,7 +12,7 @@ type (
 		Id              int64          `gorm:"column:id;primaryKey"`
 		TwitterId       sql.NullInt64  `gorm:"column:twitter_id"`
 		Name            sql.NullString `gorm:"column:name"`
-		ScreenName      string         `gorm:"column:screen_name;index"`
+		ScreenName      string         `gorm:"column:screen_name;index;not mull"`
 		Location        sql.NullString `gorm:"column:location"`
 		Url             sql.NullString `gorm:"column:url"`
 		Description     sql.NullString `gorm:"column:description"`
@@ -38,6 +38,10 @@ type (
 		log  logx.Logger
 	}
 )
+
+func (Seed) TableName() string {
+	return "seed"
+}
 
 func NewSeedModel(repo *Repository, log logx.Logger) SeedModel {
 	return &SeedRepo{
