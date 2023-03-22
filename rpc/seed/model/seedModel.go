@@ -12,7 +12,7 @@ type (
 		Id              int64          `gorm:"column:id;primaryKey"`
 		TwitterId       sql.NullInt64  `gorm:"column:twitter_id"`
 		Name            sql.NullString `gorm:"column:name"`
-		ScreenName      string         `gorm:"column:screen_name;index;not mull"`
+		ScreenName      string         `gorm:"column:screen_name;uniqueIndex;not null"`
 		Location        sql.NullString `gorm:"column:location"`
 		Url             sql.NullString `gorm:"column:url"`
 		Description     sql.NullString `gorm:"column:description"`
