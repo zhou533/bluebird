@@ -1,0 +1,5 @@
+Tasks:
+  - cronspec: "* * * * *"
+    task_name: foo
+Redis:
+  Host: localhost:6379
