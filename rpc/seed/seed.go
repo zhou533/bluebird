@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 
 	"bluebird/rpc/seed/internal/config"
+	"bluebird/rpc/seed/internal/mqs/delayMq"
 	"bluebird/rpc/seed/internal/server"
 	"bluebird/rpc/seed/internal/svc"
 	"bluebird/rpc/seed/seed"
@@ -23,18 +25,26 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-	ctx := svc.NewServiceContext(c)
-	defer ctx.Cleanup()
+	svcCtx := svc.NewServiceContext(c)
+	defer svcCtx.Cleanup()
+
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		seed.RegisterSeedServiceServer(grpcServer, server.NewSeedServiceServer(ctx))
+		seed.RegisterSeedServiceServer(grpcServer, server.NewSeedServiceServer(svcCtx))
 
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
 		}
 	})
-	defer s.Stop()
+	//defer s.Stop()
+	serviceGroup.Add(s)
+
+	at := delayMq.NewAsynqTask(context.Background(), svcCtx)
+	serviceGroup.Add(at)
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
-	s.Start()
+	//s.Start()
+	serviceGroup.Start()
 }

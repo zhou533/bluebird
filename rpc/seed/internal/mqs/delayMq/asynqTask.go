@@ -24,7 +24,7 @@ func (a *AsynqTask) Start() {
 	fmt.Println("AsynqTask Start")
 
 	srv := asynq.NewServer(
-		asynq.RedisClientOpt{Addr: ""},
+		asynq.RedisClientOpt{Addr: a.svcCtx.Config.Redis.Host},
 		asynq.Config{
 			Concurrency: 10,
 			Queues: map[string]int{
@@ -35,7 +35,7 @@ func (a *AsynqTask) Start() {
 
 	mux := asynq.NewServeMux()
 
-	mux.HandleFunc("add_seed", func(ctx context.Context, t *asynq.Task) error {
+	mux.HandleFunc("update:seed:details", func(ctx context.Context, t *asynq.Task) error {
 		fmt.Println("add_seed")
 		return nil
 	})

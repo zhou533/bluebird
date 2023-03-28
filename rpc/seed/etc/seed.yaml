@@ -5,3 +5,5 @@ Etcd:
   - 127.0.0.1:2379
   Key: seed.rpc
 DataSource: host=127.0.0.1 port=5432 user=custody dbname=db_bluebird sslmode=disable
+Redis:
+  Host: localhost:6379

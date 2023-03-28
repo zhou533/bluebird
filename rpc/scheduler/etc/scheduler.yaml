@@ -1,5 +1,5 @@
 Tasks:
-  - cronspec: "* * * * *"
-    task_name: foo
+  - cronspec: "*/5 * * * *"
+    task_name: update:seed:details
 Redis:
   Host: localhost:6379
