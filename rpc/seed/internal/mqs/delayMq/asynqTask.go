@@ -35,10 +35,7 @@ func (a *AsynqTask) Start() {
 
 	mux := asynq.NewServeMux()
 
-	mux.HandleFunc("update:seed:details", func(ctx context.Context, t *asynq.Task) error {
-		fmt.Println("add_seed")
-		return nil
-	})
+	mux.Handle("update:seed:details", NewUpdateUserDetailsHandler(a.svcCtx))
 
 	if err := srv.Run(mux); err != nil {
 		panic(err)
