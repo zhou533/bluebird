@@ -7,3 +7,6 @@ Etcd:
 DataSource: host=127.0.0.1 port=5432 user=custody dbname=db_bluebird sslmode=disable
 Redis:
   Host: localhost:6379
+Twitter:
+  APIKey: ${twitter_app_key}
+  APISecretKey: ${twitter_api_secret_key}
