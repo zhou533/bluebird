@@ -28,7 +28,7 @@ func NewTwitterClient(cfg config.Config) (*TwitterClient, error) {
 	}, nil
 }
 
-func (tc *TwitterClient) LookupUseydr(usernames []string) ([]*TwitterUser, error) {
+func (tc *TwitterClient) LookupUser(usernames []string) ([]*TwitterUser, error) {
 	opts := twitter.UserLookupOpts{
 		Expansions: []twitter.Expansion{twitter.ExpansionPinnedTweetID},
 	}

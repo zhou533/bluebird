@@ -30,6 +30,8 @@ type (
 
 		FindOne(ctx context.Context, id int64) (*Seed, error)
 		FindOneByUserName(ctx context.Context, username string) (*Seed, error)
+		FindUsersByStatus(ctx context.Context, status int64) ([]*Seed, error)
+		FindUsernamesByStatus(ctx context.Context, status int64) ([]string, error)
 		Update(ctx context.Context, data *Seed) error
 	}
 
@@ -70,6 +72,22 @@ func (sr *SeedRepo) FindOneByUserName(ctx context.Context, username string) (*Se
 	var seed Seed
 	result := sr.repo.DB(ctx).Where("username = ?", username).First(&seed)
 	return &seed, result.Error
+}
+
+func (sr *SeedRepo) FindUsersByStatus(ctx context.Context, status int64) ([]*Seed, error) {
+	var seeds []*Seed
+	result := sr.repo.DB(ctx).Where("status = ?", status).Find(&seeds)
+	return seeds, result.Error
+}
+
+func (sr *SeedRepo) FindUsernamesByStatus(ctx context.Context, status int64) ([]string, error) {
+	var seeds []Seed
+	result := sr.repo.DB(ctx).Where("status = ?", status).Find(&seeds)
+	var usernames []string
+	for _, seed := range seeds {
+		usernames = append(usernames, seed.UserName)
+	}
+	return usernames, result.Error
 }
 
 func (sr *SeedRepo) Update(ctx context.Context, seed *Seed) error {
