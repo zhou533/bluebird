@@ -2,7 +2,7 @@ Name: scheduler
 Host: 0.0.0.0
 Port: 3002
 Tasks:
-  - cronspec: "*/5 * * * *"
+  - cronspec: "*/1 * * * *"
     task_name: "update:seed:details"
 Redis:
   Host: localhost:6379

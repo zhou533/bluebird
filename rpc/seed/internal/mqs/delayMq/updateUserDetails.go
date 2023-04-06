@@ -4,8 +4,10 @@ import (
 	"bluebird/rpc/seed/internal/svc"
 	"context"
 	"database/sql"
+	"strings"
 
 	"github.com/hibiken/asynq"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UpdateUserDetailsHandler struct {
@@ -18,15 +20,17 @@ func NewUpdateUserDetailsHandler(svcCtx *svc.ServiceContext) *UpdateUserDetailsH
 	}
 }
 
-func (h *UpdateUserDetailsHandler) ProcessTask(ctx context.Context, _ *asynq.Task) error {
+func (h *UpdateUserDetailsHandler) ProcessTask(ctx context.Context, t *asynq.Task) error {
 	// implement the business logic of the task
+	logx.Infof("UpdateUserDetailsHandler ProcessTask with name: %s", t.Type())
 	seeds, err := h.svcCtx.SeedModel.FindUsersByStatus(ctx, 0)
 	if err != nil {
-		// TODO log
+		logx.Errorf("FindUsersByStatus error: %v", err)
 		return err
 	}
 
 	if len(seeds) == 0 {
+		logx.Info("no seeds to update user details")
 		return nil
 	}
 
@@ -39,16 +43,18 @@ func (h *UpdateUserDetailsHandler) ProcessTask(ctx context.Context, _ *asynq.Tas
 		usernames = append(usernames, seed.UserName)
 	}
 
+	logx.Infof("lookup usernames: %s", strings.Join(usernames, ","))
 	users, err := h.svcCtx.TwitterClient.LookupUser(usernames)
 	if err != nil {
-		// TODO log
+		logx.Errorf("LookupUser error: %v", err)
 		return err
 	}
 
 	for _, user := range users {
 		seed, err := h.svcCtx.SeedModel.FindOneByUserName(ctx, user.UserName)
 		if err != nil {
-			// TODO log
+			//
+			logx.Errorf("FindOneByUserName error: %v", err)
 			continue
 		}
 
@@ -63,7 +69,8 @@ func (h *UpdateUserDetailsHandler) ProcessTask(ctx context.Context, _ *asynq.Tas
 
 		err = h.svcCtx.SeedModel.Update(ctx, seed)
 		if err != nil {
-			// TODO log
+			//
+			logx.Errorf("Update error: %v", err)
 			continue
 		}
 	}

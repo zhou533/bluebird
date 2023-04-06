@@ -31,6 +31,19 @@ func NewTwitterClient(cfg config.Config) (*TwitterClient, error) {
 func (tc *TwitterClient) LookupUser(usernames []string) ([]*TwitterUser, error) {
 	opts := twitter.UserLookupOpts{
 		Expansions: []twitter.Expansion{twitter.ExpansionPinnedTweetID},
+		UserFields: []twitter.UserField{
+			twitter.UserFieldID,
+			twitter.UserFieldName,
+			twitter.UserFieldUserName,
+			twitter.UserFieldCreatedAt,
+			twitter.UserFieldDescription,
+			twitter.UserFieldLocation,
+			twitter.UserFieldPinnedTweetID,
+			twitter.UserFieldProfileImageURL,
+			twitter.UserFieldProtected,
+			twitter.UserFieldURL,
+			twitter.UserFieldVerified,
+		},
 	}
 	resp, err := tc.Client.UserNameLookup(context.Background(), usernames, opts)
 	if err != nil {
