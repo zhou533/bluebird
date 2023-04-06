@@ -2,6 +2,7 @@ package svc
 
 import (
 	"bluebird/rpc/seed/internal/config"
+	"bluebird/rpc/seed/internal/twitter"
 	"bluebird/rpc/seed/model"
 	"context"
 
@@ -9,9 +10,10 @@ import (
 )
 
 type ServiceContext struct {
-	Config    config.Config
-	Cleanup   func()
-	SeedModel model.SeedModel
+	Config        config.Config
+	Cleanup       func()
+	TwitterClient *twitter.TwitterClient
+	SeedModel     model.SeedModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -20,11 +22,17 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	if err != nil {
 		panic(err)
 	}
+
+	twiClient, err := twitter.NewTwitterClient(c)
+	if err != nil {
+		panic(err)
+	}
 	return &ServiceContext{
 		Config: c,
 		Cleanup: func() {
 			cleanup()
 		},
-		SeedModel: model.NewSeedModel(repo, log),
+		TwitterClient: twiClient,
+		SeedModel:     model.NewSeedModel(repo, log),
 	}
 }
